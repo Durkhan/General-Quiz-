@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group android:id="@+id/group_divider1"  >
+    <item android:title="@string/profile"
+        android:icon="@drawable/account"
+        android:id="@+id/profile">
+
+    </item>
+    <item android:title="@string/leaderboard"
+        android:icon="@drawable/leader"
+        android:id="@+id/leader">
+
+    </item>
+    <item android:title="@string/statics"
+        android:icon="@drawable/statistics"
+        android:id="@+id/statistics">
+
+    </item>
+</group>
+
+
+        <item android:title="@string/introduction"
+            android:icon="@drawable/instruction"
+            android:id="@+id/instruction"></item>
+    <item android:title="@string/settings"
+        android:icon="@drawable/settings"
+        android:id="@+id/settings">
+        </item>
+
+
+
+    <group android:id="@+id/group_divider2">
+        <item android:title="@string/share"
+            android:icon="@drawable/share"
+            android:id="@+id/share">
+        </item>
+        <item android:icon="@drawable/contact"
+            android:id="@+id/contact"
+            android:title="@string/contact">
+        </item>
+
+    </group>
+    <item android:icon="@drawable/logout"
+        android:id="@+id/logout"
+        android:title="@string/logout">
+    </item>
+</menu>

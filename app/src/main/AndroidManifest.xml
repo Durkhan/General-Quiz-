@@ -12,17 +12,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizApp">
-        <activity android:name=".ResultActivty"></activity>
-        <activity android:name=".logun.RegisterActivity">
+        <activity android:name=".ProfilActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.QuizApps"></activity>
+        <activity android:name=".Instruction" />
+        <activity
+            android:name=".LeaderboardActivity"
+            android:theme="@style/Theme.QuizApps" />
+        <activity
+            android:name=".StatisticActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.QuizAppsStatic" />
+        <activity
+            android:name=".ResultActivty"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.QuizApps" />
+        <activity
+            android:name=".logun.RegisterActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".logun.LoginActivity" />
+        <activity
+            android:name=".logun.LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QuestionSActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.QuizApps" />
         <activity
             android:name=".MainActivity"

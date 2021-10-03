@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-<group android:id="@+id/group_divider1"  >
+<group android:id="@+id/group_divider1">
     <item android:title="@string/profile"
         android:icon="@drawable/account"
         android:id="@+id/profile">
 
     </item>
+
     <item android:title="@string/leaderboard"
         android:icon="@drawable/leader"
         android:id="@+id/leader">

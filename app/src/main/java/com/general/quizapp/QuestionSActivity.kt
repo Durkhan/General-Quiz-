@@ -2,7 +2,6 @@ package com.general.quizapp
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.media.MediaPlayer
@@ -24,6 +23,11 @@ import kotlinx.android.synthetic.main.activity_question_s.*
 
 class QuestionSActivity : AppCompatActivity() {
     var caterogy:String?=null
+    var score:Int=0
+    var correct:Int=0
+    var wrong:Int=0
+    var lost:Int=0
+    var won:Int=0
     lateinit var intent2:Intent
     lateinit var times:CountDownTimer
     lateinit var animation:Animation
@@ -31,6 +35,7 @@ class QuestionSActivity : AppCompatActivity() {
     lateinit var prefence:MyPrefence
     lateinit var vibratoreffect:VibrationEffect
     lateinit var vibrator:Vibrator
+    lateinit var difficulty:String
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +43,6 @@ class QuestionSActivity : AppCompatActivity() {
         setContentView(R.layout.activity_question_s)
         prefence= MyPrefence(this@QuestionSActivity)
         exit.setOnClickListener{
-            times.start().cancel()
             onBackPressed()
         }
         progess.setProgressTintList(ColorStateList.valueOf(Color.RED))
@@ -47,7 +51,8 @@ class QuestionSActivity : AppCompatActivity() {
         var retrofitInstance= RetrofitInstance.getQuizQuestions()?.create(ApiService::class.java)
         var caterogynum:String=intent.getStringExtra("catorgy").toString()
         caterogy=caterogynum
-        retrofitInstance?.quizquestions(12, intent.getStringExtra("difficulty").toString(), caterogynum.toInt(), "multiple")
+        difficulty=intent.getStringExtra("difficulty").toString()
+        retrofitInstance?.quizquestions(12, difficulty, caterogynum.toInt(), "multiple")
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(getObserver())
@@ -126,6 +131,11 @@ class QuestionSActivity : AppCompatActivity() {
 
             override fun onFinish() {
                 intent2 = Intent(baseContext, ResultActivty::class.java)
+                intent2.putExtra("score",score.toString())
+                intent2.putExtra("correct",correct.toString())
+                intent2.putExtra("won",won.toString())
+                intent2.putExtra("lost",lost.toString())
+                intent2.putExtra("wrong",wrong.toString())
                 startActivity(intent2)
             }
 
@@ -221,7 +231,39 @@ class QuestionSActivity : AppCompatActivity() {
         if (prefence.getBoolen("sound")==true)
             mediaPlayer.start()
     }
+    fun checkdifficulty_minusscore() {
+        wrong=wrong+1
+        if (difficulty == "easy") {
+            score = score - 1
+            lost=wrong
+        }
+        if (difficulty == "medium") {
+            score = score -2
+            lost=wrong*2
+        }
+        if (difficulty == "hard") {
+            score = score - 3
+            lost=wrong*3
+        }
 
+    }
+
+    fun checkdifficulty_addscore() {
+        correct=correct+1
+        if (difficulty == "easy") {
+            score = score + 1
+            won=correct
+        }
+        if (difficulty == "medium") {
+            score = score + 3
+            won=correct*3
+        }
+        if (difficulty == "hard") {
+            score = score + 5
+            won=correct*5
+        }
+
+    }
     private fun setquestions(variantslist: ArrayList<String>, correctanswer: String) {
 
 
@@ -246,12 +288,16 @@ class QuestionSActivity : AppCompatActivity() {
         variantslist.remove(variant4)
 
 
+
+
         option1.setOnClickListener {
             vibrationcheck()
             if(variant1.equals(correctanswer)) {
                 mediaPlayer = MediaPlayer.create(this, R.raw.correctanswer)
                 soundcheck()
                 option1.setBackgroundResource(R.drawable.correct_answer)
+                checkdifficulty_addscore()
+
             }
             if(variant2.equals(correctanswer))
                 option2.setBackgroundResource(R.drawable.correct_answer)
@@ -262,8 +308,8 @@ class QuestionSActivity : AppCompatActivity() {
             if(!variant1.equals(correctanswer)){
                 mediaPlayer=MediaPlayer.create(this,R.raw.wronganswer)
                 soundcheck()
-
                 option1.setBackgroundResource(R.drawable.wrong_answer)
+                checkdifficulty_minusscore()
             }
     cancelclickable()
         }
@@ -275,6 +321,7 @@ class QuestionSActivity : AppCompatActivity() {
                 mediaPlayer=MediaPlayer.create(this,R.raw.correctanswer)
                 soundcheck()
                 option2.setBackgroundResource(R.drawable.correct_answer)
+                checkdifficulty_addscore()
             }
             if(variant3.equals(correctanswer))
                 option3.setBackgroundResource(R.drawable.correct_answer)
@@ -284,6 +331,7 @@ class QuestionSActivity : AppCompatActivity() {
                 mediaPlayer = MediaPlayer.create(this, R.raw.wronganswer)
                 soundcheck()
                 option2.setBackgroundResource(R.drawable.wrong_answer)
+                checkdifficulty_minusscore()
             }
             cancelclickable()
         }
@@ -297,6 +345,7 @@ class QuestionSActivity : AppCompatActivity() {
                 mediaPlayer=MediaPlayer.create(this,R.raw.correctanswer)
                 soundcheck()
                 option3.setBackgroundResource(R.drawable.correct_answer)
+                checkdifficulty_addscore()
             }
             if(variant4.equals(correctanswer))
                 option4.setBackgroundResource(R.drawable.correct_answer)
@@ -304,6 +353,7 @@ class QuestionSActivity : AppCompatActivity() {
                 mediaPlayer = MediaPlayer.create(this, R.raw.wronganswer)
                 soundcheck()
                 option3.setBackgroundResource(R.drawable.wrong_answer)
+                checkdifficulty_minusscore()
             }
             cancelclickable()
 
@@ -320,12 +370,14 @@ class QuestionSActivity : AppCompatActivity() {
                 mediaPlayer=MediaPlayer.create(this,R.raw.correctanswer)
                 soundcheck()
                 option4.setBackgroundResource(R.drawable.correct_answer)
+                checkdifficulty_addscore()
             }
 
             if (!variant4.equals(correctanswer)){
                 mediaPlayer=MediaPlayer.create(this,R.raw.wronganswer)
                 soundcheck()
                 option4.setBackgroundResource(R.drawable.wrong_answer)
+                checkdifficulty_minusscore()
             }
 
             cancelclickable()

@@ -3,6 +3,7 @@ package com.general.quizapp
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -16,25 +17,35 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.general.quizapp.logun.LoginActivity
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.difficultydialog.*
 import kotlinx.android.synthetic.main.difficultydialog.view.*
+import kotlinx.android.synthetic.main.header.*
+import kotlinx.android.synthetic.main.header.view.*
 import kotlinx.android.synthetic.main.settingslayout.*
 import kotlinx.android.synthetic.main.settingslayout.view.*
 
 
 class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var intentmain:Intent
-    var caterygnum:Int? =0
+    var caterygnum:Int?=0
     lateinit var prefence: MyPrefence
     lateinit var mediaplayer:MediaPlayer
     lateinit var vibrator: Vibrator
+    lateinit var firestore: FirebaseFirestore
+    lateinit var firebaseAuth: FirebaseAuth
+    lateinit var userId:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         intent
         prefence= MyPrefence(this@MainActivity)
+        firebaseAuth=FirebaseAuth.getInstance()
+        firestore= FirebaseFirestore.getInstance()
         clickcatorgy()
          openclosedrawerlayout()
     }
@@ -42,6 +53,17 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private fun openclosedrawerlayout() {
         nav_view.bringToFront()
         val toggle=ActionBarDrawerToggle(this, drawer_layout, R.string.navigation_open_drawer, R.string.navigation_close_drawer)
+        userId=firebaseAuth.currentUser?.uid.toString()
+        firestore.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener {result->
+                    userdataname.text=result.getString("username").toString()
+                    profilmain.setBackgroundColor(Color.parseColor(result.getString("color")))
+                    profilmain.text=result.getString("firstLetter")
+                    level.text=result.getString("level")?.substring(0, result.getString("level")?.indexOf(".")!!).toString()
+                }
+
+
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
@@ -51,6 +73,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             else
                 drawer_layout.closeDrawer(GravityCompat.END)
         }
+
     }
 
     override fun onBackPressed(){
@@ -350,6 +373,29 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                      alertDialog.cancel()
                  }
 
+             }
+             R.id.profile->{
+                 var intent=Intent(this,ProfilActivity::class.java)
+                 startActivity(intent)
+             }
+             R.id.logout->{
+                 var intent=Intent(this,LoginActivity::class.java)
+                 startActivity(intent)
+                 prefence.setString("login","logout")
+                 finish()
+
+             }
+             R.id.statistics->{
+                 var intent2=Intent(this,StatisticActivity::class.java)
+                 startActivity(intent2)
+             }
+             R.id.leader->{
+                 var intent=Intent(this,LeaderboardActivity::class.java)
+                 startActivity(intent)
+             }
+             R.id.instruction->{
+                 var intent=Intent(this,Instruction::class.java)
+                 startActivity(intent)
              }
 
 

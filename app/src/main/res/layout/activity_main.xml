@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/nav_view"
-        android:background="#4D000000"
+        android:background="#66000000"
         app:headerLayout="@layout/header"
         app:itemTextColor="@color/white"
         android:textAlignment="center"

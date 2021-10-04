@@ -16,9 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_profil.*
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.activity_result_activty.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -32,6 +30,13 @@ class RegisterActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         connectfirebase()
         intent
+    }
+    override fun onBackPressed(){
+        val main= Intent(Intent.ACTION_MAIN)
+        main.addCategory(Intent.CATEGORY_HOME)
+        main.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(main)
+
     }
 
     fun connectfirebase() {
@@ -104,7 +109,7 @@ class RegisterActivity : AppCompatActivity() {
                                 progress.visibility = View.GONE
                             }
 
-                                var colorList= arrayListOf("#B3E9F811","#0FDA18","#E68E24AA","#80E53935","#B3F4511E","#43A047","#3949AB","#FFB300","#00897B","#464E4D","#98928A","#E3BB86")
+                                var colorList= arrayListOf("#B3E9F811","#0FDA18","#E68E24AA","#80E53935","#B3F4511E","#43A047","#3949AB","#FFB300","#00897B","#FF5C6E4A","#98928A","#E3BB86")
                                 var color=colorList.random()
                                 var firstLetter=usernames.substring(0,1).toUpperCase()
                                 userID = firebaseauth.currentUser?.uid.toString()

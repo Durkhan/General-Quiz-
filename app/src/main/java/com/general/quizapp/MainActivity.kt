@@ -2,9 +2,11 @@ package com.general.quizapp
 
 
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -13,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -56,7 +59,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         userId=firebaseAuth.currentUser?.uid.toString()
         firestore.collection("users").document(userId)
                 .get()
-                .addOnSuccessListener {result->
+                .addOnSuccessListener { result->
                     userdataname.text=result.getString("username").toString()
                     profilmain.setBackgroundColor(Color.parseColor(result.getString("color")))
                     profilmain.text=result.getString("firstLetter")
@@ -85,7 +88,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     }
     fun soundcheck(){
         if (prefence.getBoolen("sound")==true){
-            mediaplayer=MediaPlayer.create(this,R.raw.soundbutton)
+            mediaplayer=MediaPlayer.create(this, R.raw.soundbutton)
             mediaplayer.start()
         }
     }
@@ -94,7 +97,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         @RequiresApi(Build.VERSION_CODES.O)
         if (prefence.getBoolen("vibration")==true){
             vibrator=getSystemService(VIBRATOR_SERVICE) as Vibrator
-            var vibrationEffect=VibrationEffect.createOneShot(300,VibrationEffect.PARCELABLE_WRITE_RETURN_VALUE)
+            var vibrationEffect=VibrationEffect.createOneShot(300, VibrationEffect.PARCELABLE_WRITE_RETURN_VALUE)
             vibrator.vibrate(vibrationEffect)
         }
     }
@@ -344,58 +347,78 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                          .setView(view)
                          .create()
                  alertDialog.show()
+                 view.rateus.setOnClickListener {
+                     val appPackageName = packageName // this is your playstore url id parameter
+                     try {
+                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+                     } catch (anfe: ActivityNotFoundException) {
+                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+                     }
+                 }
                  view.sound.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                          if (isChecked) {
-                            prefence.setBoolen("sound",true)
+                             prefence.setBoolen("sound", true)
                              view.sound.isChecked = true
 
                          } else {
-                             prefence.setBoolen("sound",false)
+                             prefence.setBoolen("sound", false)
                              view.sound.isChecked = false
 
 
                          }
                      }
                  })
-                 view.sound.isChecked=prefence.getBoolen("sound")
-                 view.vibration.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{vibrationview,isChecked->
-                     if (isChecked){
-                         prefence.setBoolen("vibration",true)
-                         view.vibration.isChecked=true
-                     }else{
-                         prefence.setBoolen("vibration",false)
-                         view.vibration.isChecked=false
+                 view.sound.isChecked = prefence.getBoolen("sound")
+                 view.vibration.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { vibrationview, isChecked ->
+                     if (isChecked) {
+                         prefence.setBoolen("vibration", true)
+                         view.vibration.isChecked = true
+                     } else {
+                         prefence.setBoolen("vibration", false)
+                         view.vibration.isChecked = false
                      }
                  })
-                 view.vibration.isChecked=prefence.getBoolen("vibration")
+                 view.vibration.isChecked = prefence.getBoolen("vibration")
                  view.ok.setOnClickListener {
                      alertDialog.cancel()
                  }
 
              }
-             R.id.profile->{
-                 var intent=Intent(this,ProfilActivity::class.java)
+             R.id.profile -> {
+                 var intent = Intent(this, ProfilActivity::class.java)
                  startActivity(intent)
              }
-             R.id.logout->{
-                 var intent=Intent(this,LoginActivity::class.java)
+             R.id.logout -> {
+                 var intent = Intent(this, LoginActivity::class.java)
                  startActivity(intent)
-                 prefence.setString("login","logout")
+                 prefence.setString("login", "logout")
                  finish()
 
              }
-             R.id.statistics->{
-                 var intent2=Intent(this,StatisticActivity::class.java)
+             R.id.statistics -> {
+                 var intent2 = Intent(this, StatisticActivity::class.java)
                  startActivity(intent2)
              }
-             R.id.leader->{
-                 var intent=Intent(this,LeaderboardActivity::class.java)
+             R.id.leader -> {
+                 var intent = Intent(this, LeaderboardActivity::class.java)
                  startActivity(intent)
              }
-             R.id.instruction->{
-                 var intent=Intent(this,Instruction::class.java)
+             R.id.instruction -> {
+                 var intent = Intent(this, Instruction::class.java)
                  startActivity(intent)
+             }
+             R.id.contact -> {
+                 var intent = Intent(this, ContactusActivity::class.java)
+                 startActivity(intent)
+             }
+             R.id.share -> {
+                 val appPackageName = packageName // this is your playstore url id parameter
+                 try {
+                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+                 } catch (anfe: ActivityNotFoundException) {
+                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+                 }
              }
 
 

@@ -92,6 +92,7 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_marginLeft="15dp"
+            android:id="@+id/rateus"
             android:layout_marginRight="10dp"
             android:layout_height="match_parent">
             <ImageView

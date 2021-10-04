@@ -7,14 +7,24 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/quiz_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizApp">
-        <activity android:name=".ProfilActivity"
+        <activity android:name=".SplashActivty"
+            android:theme="@style/Theme.QuizApps">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER"
+                    />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ContactusActivity" />
+        <activity
+            android:name=".ProfilActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.QuizApps"></activity>
+            android:theme="@style/Theme.QuizApps" />
         <activity android:name=".Instruction" />
         <activity
             android:name=".LeaderboardActivity"
@@ -30,11 +40,7 @@
         <activity
             android:name=".logun.RegisterActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".logun.LoginActivity"

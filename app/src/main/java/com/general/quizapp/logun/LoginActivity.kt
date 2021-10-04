@@ -55,47 +55,46 @@ class LoginActivity : AppCompatActivity(){
                 firestore.collection("users").whereEqualTo("username", usernames).whereEqualTo("password", passwords)
                         .get()
                         .addOnCompleteListener {task->
-                            var emailfromdata=""
+
                             if (task.isSuccessful){
+                                var emailfromdata=""
+                                for (documentSnapshot in task.getResult()!!) {
+                                    emailfromdata = documentSnapshot.getString("email").toString()
+                                }
+                                if (emailfromdata!=""){
+                                    firestore.collection("users").whereEqualTo("email", emailfromdata).whereEqualTo("password", passwords)
+                                            .get()
+                                            .addOnCompleteListener {task->
+                                                if (task.isSuccessful){
+                                                    firebaseAuth.signInWithEmailAndPassword(emailfromdata!!, passwords).addOnCompleteListener { task ->
+                                                        if (task.isSuccessful){
+                                                            if (firebaseAuth.currentUser?.isEmailVerified!!){
+                                                                prefence= MyPrefence(this@LoginActivity)
+                                                                prefence.setString("login","singin")
+                                                                startActivity(Intent(this, MainActivity::class.java))
 
-                            for (documentSnapshot in task.getResult()!!) {
-                                emailfromdata = documentSnapshot.getString("email").toString()
-                            }
-
-                                    if (emailfromdata!=""){
-                                        firestore.collection("users").whereEqualTo("email", emailfromdata).whereEqualTo("password", passwords)
-                                                .get()
-                                                .addOnCompleteListener {task->
-                                                    if (task.isSuccessful){
-                                                        firebaseAuth.signInWithEmailAndPassword(emailfromdata!!, passwords).addOnCompleteListener { task ->
-                                                            if (task.isSuccessful){
-                                                                if (firebaseAuth.currentUser?.isEmailVerified!!){
-                                                                    prefence= MyPrefence(this@LoginActivity)
-                                                                    prefence.setString("login","singin")
-                                                                    startActivity(Intent(this, MainActivity::class.java))
-
-                                                                }
-                                                                else
-                                                                    Toast.makeText(applicationContext, "Please verify your email", Toast.LENGTH_LONG).show()
                                                             }
+                                                            else
+                                                                Toast.makeText(applicationContext, "Please verify your email", Toast.LENGTH_LONG).show()
+                                                        }
 
-                                                            else{
-                                                                Toast.makeText(applicationContext, "Error!" + task.exception?.message, Toast.LENGTH_LONG).show()
-                                                                progressbar.visibility=View.GONE
-                                                            }
+                                                        else{
+                                                            Toast.makeText(applicationContext, "Error!" + task.exception?.message, Toast.LENGTH_LONG).show()
+                                                            progressbar.visibility=View.GONE
                                                         }
                                                     }
-                                                    else{
-                                                        Toast.makeText(applicationContext, "Error!" + task.exception?.message, Toast.LENGTH_LONG).show()
-                                                        progressbar.visibility=View.GONE
-                                                    }
-
                                                 }
-                                    }
-                                    else{
-                                        Toast.makeText(applicationContext, "Username or password is wrong", Toast.LENGTH_LONG).show()
-                                        progressbar.visibility=View.GONE
-                                    }
+                                                else{
+                                                    Toast.makeText(applicationContext, "Error!" + task.exception?.message, Toast.LENGTH_LONG).show()
+                                                    progressbar.visibility=View.GONE
+                                                }
+
+                                            }
+                                }
+                                else{
+                                    Toast.makeText(applicationContext, "Username or password is wrong", Toast.LENGTH_LONG).show()
+                                    progressbar.visibility=View.GONE
+                                }
 
 
                             }
@@ -118,7 +117,7 @@ class LoginActivity : AppCompatActivity(){
                     }
                     else
                         Toast.makeText(applicationContext, "Please verify your email", Toast.LENGTH_LONG).show()
-                        progressbar.visibility=View.GONE
+                    progressbar.visibility=View.GONE
 
                 }
 
@@ -157,6 +156,9 @@ class LoginActivity : AppCompatActivity(){
             alertDialog.show()
         }
     }
-}
 
+    override fun onBackPressed() {
+
+    }
+}
 

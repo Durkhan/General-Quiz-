@@ -91,6 +91,7 @@ class ProfilActivity : AppCompatActivity() {
                 confirmpasword.visibility=View.GONE
                 enternewpasword.visibility=View.VISIBLE
                 savenewpasword.visibility=View.VISIBLE
+
             }
             else{
                 Toast.makeText(applicationContext,"This password is not current password",Toast.LENGTH_LONG).show()
@@ -118,6 +119,8 @@ class ProfilActivity : AppCompatActivity() {
                 password_activty.visibility=View.VISIBLE
                 savenewpasword.visibility=View.GONE
                 enternewpasword.visibility=View.GONE
+                profilpaswordedit.setText("")
+                enternewpasword.setText("")
                 var user= HashMap<String,String>()
                     firestore.collection("users").document(userid).get().addOnSuccessListener { result->
                     user.put("password",passwords)

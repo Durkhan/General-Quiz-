@@ -83,9 +83,9 @@ class StatisticActivity : AppCompatActivity() {
         var listleaders= arrayListOf<Int>()
         firestore.collection("users").addSnapshotListener { querySnapsots, firestoresnapsot ->
 
-            for (i in 0..querySnapsots?.documents?.size!! - 1) {
-                var stscores: String = querySnapsots.documents[i]?.getString("scores").toString()
-                var intscores: Int = stscores.substring(0, stscores.indexOf(".")).toInt()
+            for (i in 0 until querySnapsots?.documents?.size!!) {
+                var stscores = querySnapsots.documents[i]?.getString("scores").toString()
+                var intscores= stscores.substring(0, stscores.indexOf(".")).toInt()
                 listleaders.add(intscores)
             }
             listleaders.sortDescending()

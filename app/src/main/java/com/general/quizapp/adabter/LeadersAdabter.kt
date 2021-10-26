@@ -1,4 +1,4 @@
-package com.general.quizapp
+package com.general.quizapp.adabter
 
 import android.content.Context
 import android.graphics.Color
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.general.quizapp.R
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.leaders.view.*
 
@@ -14,12 +15,12 @@ class LeadersAdabter(val context: Context,var listleaders: ArrayList<Int>, var u
     var holdernusernames:String?=null
     var enternameslist= arrayListOf<String>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeadersAdabter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view=LayoutInflater.from(context).inflate(R.layout.leaders,parent,false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: LeadersAdabter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         firestore= FirebaseFirestore.getInstance()
 

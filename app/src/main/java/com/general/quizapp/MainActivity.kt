@@ -20,7 +20,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.general.quizapp.drawerlayout.*
 import com.general.quizapp.logun.LoginActivity
+import com.general.quizapp.prefence.MyPrefence
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -413,17 +415,27 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                  startActivity(intent)
              }
              R.id.share -> {
-                 val appPackageName = packageName // this is your playstore url id parameter
+
                  try {
-                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
-                 } catch (anfe: ActivityNotFoundException) {
-                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+                     val intent1 = Intent(Intent.ACTION_SEND)
+                     intent1.type = "text/plain"
+                     intent1.putExtra(Intent.EXTRA_SUBJECT, "share app")
+                     val share = "https://play.google.com/store/apps/details?id=com.general.quizapp"
+                     intent1.putExtra(Intent.EXTRA_TEXT, share)
+                     startActivity(Intent.createChooser(intent1, "Share using"))
+                 } catch (e: Exception) {
+                     Toast.makeText(this@MainActivity, "Error occured", Toast.LENGTH_LONG).show()
                  }
+
              }
 
 
          }
         return true
+    }
+
+    fun toprofil(view: View) {
+        startActivity(Intent(this,ProfilActivity::class.java));
     }
 
 }

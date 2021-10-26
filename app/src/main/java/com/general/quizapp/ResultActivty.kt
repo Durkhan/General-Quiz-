@@ -1,10 +1,10 @@
 package com.general.quizapp
 
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
+import com.general.quizapp.drawerlayout.LeaderboardActivity
+import com.general.quizapp.drawerlayout.StatisticActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
@@ -38,11 +38,11 @@ class ResultActivty : AppCompatActivity() {
             onBackPressed()
         }
         leader.setOnClickListener {
-            var intent=Intent(this,LeaderboardActivity::class.java)
+            var intent=Intent(this, LeaderboardActivity::class.java)
             startActivity(intent)
         }
         statistic.setOnClickListener {
-            var intent=Intent(this,StatisticActivity::class.java)
+            var intent=Intent(this, StatisticActivity::class.java)
             startActivity(intent)
         }
 

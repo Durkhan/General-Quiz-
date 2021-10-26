@@ -1,4 +1,4 @@
-package com.general.quizapp
+package com.general.quizapp.splash
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import com.general.quizapp.MainActivity
+import com.general.quizapp.R
 import com.general.quizapp.logun.RegisterActivity
+import com.general.quizapp.prefence.MyPrefence
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_splash_activty.*
@@ -14,15 +17,13 @@ import kotlinx.android.synthetic.main.activity_splash_activty.*
 class SplashActivty : AppCompatActivity() {
     lateinit var handler:Handler
     lateinit var animation: Animation
-    lateinit var prefence:MyPrefence
+    lateinit var prefence: MyPrefence
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_activty)
         val firebaseauth: FirebaseAuth = FirebaseAuth.getInstance()
-        val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-        var userID: String
-        prefence=MyPrefence(this@SplashActivty)
-        animation=AnimationUtils.loadAnimation(this,R.anim.logoanim)
+        prefence= MyPrefence(this@SplashActivty)
+        animation=AnimationUtils.loadAnimation(this, R.anim.logoanim)
         logo.startAnimation(animation)
         handler= Handler()
         handler.postDelayed({

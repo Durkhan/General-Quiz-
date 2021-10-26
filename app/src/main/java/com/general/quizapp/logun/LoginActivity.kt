@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.util.PatternsCompat
 import com.general.quizapp.MainActivity
-import com.general.quizapp.MyPrefence
+import com.general.quizapp.prefence.MyPrefence
 import com.general.quizapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

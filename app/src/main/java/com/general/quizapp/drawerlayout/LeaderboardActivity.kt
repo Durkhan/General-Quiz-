@@ -1,9 +1,12 @@
-package com.general.quizapp
+package com.general.quizapp.drawerlayout
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.general.quizapp.prefence.MyPrefence
+import com.general.quizapp.R
+import com.general.quizapp.adabter.LeadersAdabter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_leaderboard.*
@@ -79,6 +82,7 @@ class  LeaderboardActivity : AppCompatActivity() {
                                         leader2.setBackgroundColor(Color.parseColor(documentSnapshot.getString("color")))
                                     }
                                 }
+
                             }
 
 
@@ -93,22 +97,25 @@ class  LeaderboardActivity : AppCompatActivity() {
                                         leaderusrname3.text = documentSnapshot.getString("username").toString()
                                         leader3.text = documentSnapshot.getString("firstLetter").toString()
                                         leader3.setBackgroundColor(Color.parseColor(documentSnapshot.getString("color")))
+
+
+
+
                                     }
                                 }
-                                if (!leaderusrname1.text.isEmpty() && !leaderusrname2.text.isEmpty() && !leaderusrname3.text.isEmpty()) {
-                                    prefence = MyPrefence(this@LeaderboardActivity, )
-                                    prefence.setString("username1", leaderusrname1.text.toString())
-                                    prefence.setString("username2", leaderusrname2.text.toString())
-                                    prefence.setString("username3", leaderusrname3.text.toString())
-                                    leaders.layoutManager = LinearLayoutManager(this)
-                                    leadersAdabter = LeadersAdabter(this, listleaders, leaderusrname1.text.toString(), leaderusrname2.text.toString(), leaderusrname3.text.toString())
-                                    leaders.adapter = leadersAdabter
-                                    leadersAdabter.notifyDataSetChanged()
-                                }
+                                leaders.layoutManager = LinearLayoutManager(this)
+                                leadersAdabter = LeadersAdabter(this, listleaders, leaderusrname1.text.toString(), leaderusrname2.text.toString(), leaderusrname3.text.toString())
+                                leaders.adapter = leadersAdabter
+                                leadersAdabter.notifyDataSetChanged()
+
+
+
                             }
 
                         }
+
             }
+
 
         }
 

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/white"
     android:theme="@style/Theme.QuizAppsStatic"
-    tools:context=".StatisticActivity">
+    tools:context=".drawerlayout.StatisticActivity">
 
    <LinearLayout
        android:layout_width="wrap_content"

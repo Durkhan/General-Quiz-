@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.general.quizapp.MainActivity
-import com.general.quizapp.MyPrefence
+import com.general.quizapp.prefence.MyPrefence
 import com.general.quizapp.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +22,7 @@ import kotlin.collections.HashMap
 
 
 class RegisterActivity : AppCompatActivity() {
-    lateinit var prefence:MyPrefence
+    lateinit var prefence: MyPrefence
     lateinit var firebaseUser: FirebaseUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

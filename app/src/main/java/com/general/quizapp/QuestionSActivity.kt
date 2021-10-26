@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.general.quizapp.modell.Response
+import com.general.quizapp.prefence.MyPrefence
 import com.general.quizapp.retrofit.ApiService
 import com.general.quizapp.retrofit.RetrofitInstance
 import io.reactivex.Observer
@@ -32,7 +33,7 @@ class QuestionSActivity : AppCompatActivity() {
     lateinit var times:CountDownTimer
     lateinit var animation:Animation
     lateinit var mediaPlayer: MediaPlayer
-    lateinit var prefence:MyPrefence
+    lateinit var prefence: MyPrefence
     lateinit var vibratoreffect:VibrationEffect
     lateinit var vibrator:Vibrator
     lateinit var difficulty:String

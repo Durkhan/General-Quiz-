@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.general.quizapp">
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/quiz_icon"
+        android:icon="@drawable/applogo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizApp">
-        <activity android:name=".SplashActivty"
+        <activity android:name=".splash.SplashActivty"
             android:theme="@style/Theme.QuizApps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,17 +19,17 @@
                     />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactusActivity" />
+        <activity android:name=".drawerlayout.ContactusActivity" />
         <activity
-            android:name=".ProfilActivity"
+            android:name=".drawerlayout.ProfilActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.QuizApps" />
-        <activity android:name=".Instruction" />
+        <activity android:name=".drawerlayout.Instruction" />
         <activity
-            android:name=".LeaderboardActivity"
+            android:name=".drawerlayout.LeaderboardActivity"
             android:theme="@style/Theme.QuizApps" />
         <activity
-            android:name=".StatisticActivity"
+            android:name=".drawerlayout.StatisticActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.QuizAppsStatic" />
         <activity

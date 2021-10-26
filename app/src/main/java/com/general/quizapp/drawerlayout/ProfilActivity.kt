@@ -1,4 +1,4 @@
-package com.general.quizapp
+package com.general.quizapp.drawerlayout
 
 import android.content.Intent
 import android.graphics.Color
@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
+import com.general.quizapp.MainActivity
+import com.general.quizapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,7 +27,7 @@ class ProfilActivity : AppCompatActivity() {
         userid=firebaseAuth.currentUser?.uid.toString()
         var documentReference:DocumentReference=firestore.collection("users").document(userid)
         backmain.setOnClickListener {
-            var intent=Intent(this,MainActivity::class.java)
+            var intent=Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
         var editString:String?=null

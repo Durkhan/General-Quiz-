@@ -1,4 +1,4 @@
-package com.general.quizapp
+package com.general.quizapp.prefence
 
 import android.content.Context
 

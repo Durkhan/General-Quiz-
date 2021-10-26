@@ -1,7 +1,8 @@
-package com.general.quizapp
+package com.general.quizapp.drawerlayout
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.general.quizapp.R
 import kotlinx.android.synthetic.main.activity_instruction.*
 
 class Instruction : AppCompatActivity() {

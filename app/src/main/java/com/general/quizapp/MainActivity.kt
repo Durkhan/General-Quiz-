@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
@@ -184,7 +185,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             startActivity(intentmain)
         }
 
-
+       alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
 
     }

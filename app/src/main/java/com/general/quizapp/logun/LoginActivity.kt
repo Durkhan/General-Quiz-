@@ -1,7 +1,10 @@
 package com.general.quizapp.logun
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -14,10 +17,12 @@ import com.general.quizapp.MainActivity
 import com.general.quizapp.prefence.MyPrefence
 import com.general.quizapp.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.email
 import kotlinx.android.synthetic.main.activity_login.password
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.resetpasworddialog.*
 import kotlinx.android.synthetic.main.resetpasworddialog.view.*
@@ -25,12 +30,16 @@ import kotlinx.android.synthetic.main.resetpasworddialog.view.*
 
 class LoginActivity : AppCompatActivity(){
     lateinit var prefence: MyPrefence
+    lateinit var firebaseAuth:FirebaseAuth
+    lateinit var firestore:FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        var firebaseAuth:FirebaseAuth= FirebaseAuth.getInstance()
-        var firestore:FirebaseFirestore= FirebaseFirestore.getInstance()
+        firebaseAuth= FirebaseAuth.getInstance()
+        firestore= FirebaseFirestore.getInstance()
+
         login.setOnClickListener {
 
             var usernames: String = email.text.toString().trim()
@@ -52,7 +61,7 @@ class LoginActivity : AppCompatActivity(){
 
             //login firebase
             if (!PatternsCompat.EMAIL_ADDRESS.matcher(usernames).matches()){
-                firestore.collection("users").whereEqualTo("username", usernames).whereEqualTo("password", passwords)
+                firestore.collection("users").whereEqualTo("username", usernames)
                         .get()
                         .addOnCompleteListener {task->
 
@@ -61,17 +70,19 @@ class LoginActivity : AppCompatActivity(){
                                 for (documentSnapshot in task.getResult()!!) {
                                     emailfromdata = documentSnapshot.getString("email").toString()
                                 }
+
                                 if (emailfromdata!=""){
-                                    firestore.collection("users").whereEqualTo("email", emailfromdata).whereEqualTo("password", passwords)
+                                    firestore.collection("users").whereEqualTo("email", emailfromdata)
                                             .get()
                                             .addOnCompleteListener {task->
                                                 if (task.isSuccessful){
-                                                    firebaseAuth.signInWithEmailAndPassword(emailfromdata!!, passwords).addOnCompleteListener { task ->
+                                                    firebaseAuth.signInWithEmailAndPassword(emailfromdata, passwords).addOnCompleteListener { task ->
                                                         if (task.isSuccessful){
                                                             if (firebaseAuth.currentUser?.isEmailVerified!!){
                                                                 prefence= MyPrefence(this@LoginActivity)
                                                                 prefence.setString("login","singin")
                                                                 startActivity(Intent(this, MainActivity::class.java))
+                                                                 updatepassword(passwords)
 
                                                             }
                                                             else
@@ -79,7 +90,7 @@ class LoginActivity : AppCompatActivity(){
                                                         }
 
                                                         else{
-                                                            Toast.makeText(applicationContext, "Error!" + task.exception?.message, Toast.LENGTH_LONG).show()
+                                                            Toast.makeText(applicationContext, "Username or password is wrong", Toast.LENGTH_LONG).show()
                                                             progressbar.visibility=View.GONE
                                                         }
                                                     }
@@ -108,19 +119,25 @@ class LoginActivity : AppCompatActivity(){
 
 
             else{
-                firebaseAuth.signInWithEmailAndPassword(usernames,passwords).addOnSuccessListener {
-                    if (firebaseAuth.currentUser?.isEmailVerified!!){
-                        prefence= MyPrefence(this@LoginActivity)
-                        prefence.setString("login","singin")
-                        startActivity(Intent(this, MainActivity::class.java))
+                firebaseAuth.signInWithEmailAndPassword(usernames,passwords).addOnCompleteListener {task->
+                    if (task.isSuccessful){
+                        if (firebaseAuth.currentUser?.isEmailVerified!!) {
+                            prefence = MyPrefence(this@LoginActivity)
+                            prefence.setString("login", "singin")
+                            startActivity(Intent(this, MainActivity::class.java))
+                            updatepassword(passwords)
 
+                        }
+                        else {
+                            Toast.makeText(applicationContext, "Please verify your email", Toast.LENGTH_LONG).show()
+                            progressbar.visibility = View.GONE
+                        }
                     }
-                    else
-                        Toast.makeText(applicationContext, "Please verify your email", Toast.LENGTH_LONG).show()
-                    progressbar.visibility=View.GONE
-
+             else {
+                        Toast.makeText(applicationContext, "Username or password is wrong", Toast.LENGTH_LONG).show()
+                        progressbar.visibility = View.GONE
+                    }
                 }
-
             }
 
 
@@ -150,15 +167,28 @@ class LoginActivity : AppCompatActivity(){
                 startActivity(Intent(this, RegisterActivity::class.java))
                 finish()
             }
-            val alertDialog: AlertDialog = AlertDialog.Builder(this@LoginActivity)
+            var alertDialog: AlertDialog = AlertDialog.Builder(this@LoginActivity)
                     .setView(view)
                     .create()
+            alertDialog.window?.setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT))
             alertDialog.show()
         }
     }
 
-    override fun onBackPressed() {
+    private fun updatepassword(passwords: String) {
+        var userId:String
+        userId=firebaseAuth.currentUser?.uid.toString()
+        var documentReference: DocumentReference =firestore.collection("users").document(userId)
+        var user=HashMap<String,String>()
+        firestore.collection("users").document(userId).get().addOnSuccessListener {result->
+            user.put("password",passwords)
+            documentReference.update(user as Map<String, String>)
 
+
+        }
+    }
+
+    override fun onBackPressed() {
     }
 }
 

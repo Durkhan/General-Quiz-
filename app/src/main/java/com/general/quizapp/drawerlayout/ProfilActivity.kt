@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.general.quizapp.MainActivity
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_profil.*
+import kotlinx.android.synthetic.main.activity_register.*
 
 class ProfilActivity : AppCompatActivity() {
     lateinit var firebaseAuth: FirebaseAuth
@@ -39,13 +41,33 @@ class ProfilActivity : AppCompatActivity() {
             editString= profilname.text.toString()
             profilnameedit.setText(editString)
         }
-        editsave.setOnClickListener {
 
+        var usernamelist= arrayListOf<String>()
+
+        firestore.collection("users").addSnapshotListener { snapsot, firestrosnapsot ->
+            for (i in 0 until snapsot?.documents?.size!!) {
+                var usernamefromdata: String = snapsot.documents[i]?.getString("username").toString()
+                usernamelist.add(usernamefromdata)
+
+            }
+
+
+        }
+
+
+            editsave.setOnClickListener {
+                usernamelist.remove(profilname.text.toString())
             var username:String=profilnameedit.text.toString()
+
+                if (usernamelist.contains(username)){
+                    profilnameedit.setError("Username has token")
+                    return@setOnClickListener
+                }
             if (TextUtils.isEmpty(username)){
                 profilnameedit.setError("Username must be not empty")
                 return@setOnClickListener
             }
+
             if (username.length<3){
                 profilnameedit.setError("Username must be more than 3 characters")
                 return@setOnClickListener
@@ -127,6 +149,11 @@ class ProfilActivity : AppCompatActivity() {
                     firestore.collection("users").document(userid).get().addOnSuccessListener { result->
                     user.put("password",passwords)
                     password_activty.setText(passwords)
+                        firebaseAuth.currentUser?.updatePassword(passwords)?.addOnCompleteListener {task->
+                            if (task.isSuccessful){
+                                Log.d("TAG","Password saved");
+                            }
+                        }
                     documentReference.update(user as Map<String, Any>)
                     Toast.makeText(applicationContext,"Password changed",Toast.LENGTH_LONG).show()
                 }

@@ -49,13 +49,26 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+        var usernamelist= arrayListOf<String>()
+        firestore.collection("users").addSnapshotListener{snapsot,firestrosnapsot->
+            for ( i in 0 until snapsot?.documents?.size!!){
+                var usernamefromdata:String=snapsot.documents[i]?.getString("username").toString()
+                usernamelist.add(usernamefromdata);
+            }
+
+        }
         register.setOnClickListener {
             var emails: String = email.text.toString().trim()
             var passwords: String = password.text.toString().trim()
             var usernames: String = username.text.toString().trim()
 
+
             if (TextUtils.isEmpty(emails)) {
                 email.setError("Email is required")
+                return@setOnClickListener
+            }
+            if (usernamelist.contains(usernames)){
+                username.setError("Username has token")
                 return@setOnClickListener
             }
             if (usernames.length<3){

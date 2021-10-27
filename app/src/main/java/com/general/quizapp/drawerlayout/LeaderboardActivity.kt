@@ -15,7 +15,6 @@ class  LeaderboardActivity : AppCompatActivity() {
     lateinit var firestore: FirebaseFirestore
     lateinit var firebaseAuth: FirebaseAuth
     lateinit var leadersAdabter: LeadersAdabter
-    lateinit var prefence: MyPrefence
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
